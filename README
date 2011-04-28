@@ -22,13 +22,19 @@ For a single video
 
 Or from the command line
 
-    ruby vimeo_downloader.rb video_string
+    ruby vimeo_downloader.rb video video_string
 
 video_string can be either 'http://vimeo.com/VIDEO_ID' or just 'VIDEO_ID'
 
 For a vimeo video rss feed
 
     v.download_video_feed feed
+
+Or from the command line
+
+    ruby vimeo_downloader.rb feed feed_url
+
+where feed_url is an rss feed of vimeo video links
 
 VimeoDownloader released under the MIT license.
 

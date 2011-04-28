@@ -99,7 +99,12 @@ class VimeoDownloader
 
 end
 
-if ARGV[0]
+if ARGV[0] == "video"
   v = VimeoDownloader.new
-  v.download_video(ARGV[0])
+  v.download_video(ARGV[1])
+elsif ARGV[0] == "feed"
+  v = VimeoDownloader.new
+  v.download_video_feed(ARGV[1])
+else
+  puts "Format 'ruby vimeo_downloader.rb [feed | video] [feed_url | video_id ]'"
 end
