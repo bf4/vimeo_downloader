@@ -33,7 +33,7 @@ class VimeoDownloader
 
   def download
     if @video_id
-     download_link = "http://www.vimeo.com/moogaloop/play/clip:#{@video_id}/#{request_signature}/#{request_signature_expires}/?q=#{@is_hd}"
+     download_link = "http://www.vimeo.com/moogaloop/play/clip:#{@video_id}/#{request_signature}/#{request_signature_expires}/?q=#{is_hd}"
      puts download_link
     `wget #{download_link} -O #{filename}`
     record_downloaded_video
@@ -43,7 +43,7 @@ class VimeoDownloader
   end
 
   def record_downloaded_video
-    File.open("downloaded.txt", "w") {|f| f.write("http://vimeo.com/#{@video_id}\n") }
+    File.open("downloaded.txt", "a") {|f| f.write("http://vimeo.com/#{@video_id}\n") }
   end
   
   def get_feed(feed)
@@ -94,7 +94,7 @@ class VimeoDownloader
   end
   
   def filename
-    "#{@video_id}-#{caption}#{@is_hd}.#{file_extension}"
+    "#{@video_id}-#{caption}#{is_hd}.#{file_extension}"
   end
 
 end
