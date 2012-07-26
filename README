@@ -36,6 +36,8 @@ Or from the command line
 
 where feed_url is an rss feed of vimeo video links
 
+Or copy vimeo_task.rb.example to vimeo_task.rb and customize for batch jobs
+
 VimeoDownloader released under the MIT license.
 
 Copyright (C) 2011 by Benjamin Fleischer

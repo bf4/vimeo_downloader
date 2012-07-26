@@ -1,0 +1,64 @@
+require './vimeo_downloader'
+v = VimeoDownloader.new
+
+videos = []
+videos.each do |video|
+  v.download_video(video)
+end
+
+video_feeds = []
+
+my_feeds= {
+#  "name" => "rssfeed"
+}
+
+my_feeds.values.each do |video|
+  video_feeds << video
+end
+
+# array of contact names
+contacts = %w{
+# or hash of of contact identifier as key, and the vimeo contact name
+contacts_hash = {
+# "David Chelimsky" => "user1359101",
+}
+contacts.concat contacts_hash.values
+contacts.each  do |contact|
+  video_feeds << "http://vimeo.com/#{contact}/videos/rss"
+  video_feeds << "http://vimeo.com/#{contact}/likes/rss"
+end
+# channel identifier, vimeo channel name
+channels = {
+#  "arrrrcamp" => "arrrrcamp"
+}
+channels.values.each do |channel|
+  video_feeds << "http://vimeo.com/channels/#{channel}/videos/rss"
+end
+groups = {
+#  "Engine Yard University" => "84081",
+}
+
+groups.values.each do |group|
+  video_feeds << "http://vimeo.com/groups/#{group}/videos/rss"
+end
+
+albums = {
+#  "TechCasts" => "235639"
+}
+albums.values.each do |album|
+  video_feeds << "http://vimeo.com/album/#{album}/rss"
+end
+
+tags = {
+#  "New York Scala Meetup" => "ny-scala"
+}
+tags.values.each do |tag|
+  video_feeds << "http://vimeo.com/tag:#{tag}/rss"
+end
+
+### DOWNLOAD VIDEO FEEDS
+video_feeds.uniq.each do |feed|
+  puts "---- Downloading Feed #{feed}"
+  v.download_video_feed(feed)
+end
+
