@@ -2,7 +2,7 @@ I wrote this up for fun, to try to convert the bash script by Denver Gingerich a
 
 VimeoDownloader can download vimeo rss feeds or individual videos.
 
-It keeps track of downloaded videos in a very simple text file.
+It keeps track of downloaded videos in a very simple yaml file: downloaded_videos.yml
 
 The RSS parsing is nothing fancy.
 

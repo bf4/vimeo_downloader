@@ -24,6 +24,7 @@ class VimeoDownloader
   end
 
   def download_video_feed(feed = nil)
+    begin
     if feed
       get_feed(feed)
       get_links
@@ -32,7 +33,9 @@ class VimeoDownloader
         download_video(link)
       end
     end
-    write_downloaded_videos_file
+    ensure
+      write_downloaded_videos_file
+    end
   end
 
   def download_video(video_string = nil)

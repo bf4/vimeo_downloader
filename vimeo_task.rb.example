@@ -17,7 +17,7 @@ my_feeds.values.each do |video|
 end
 
 # array of contact names
-contacts = %w{
+contacts = %w{}
 # or hash of of contact identifier as key, and the vimeo contact name
 contacts_hash = {
 # "David Chelimsky" => "user1359101",
