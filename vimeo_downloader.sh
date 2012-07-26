@@ -57,24 +57,29 @@ else
 	USING_PERL=0
 fi
 
+echo "${GET_CMD} https://vimeo.com/${VIMEO_ID}"
 VIDEO_XML=`${GET_CMD} http://vimeo.com/${VIMEO_ID}`
 
 if [ $USING_PERL -eq 1 ]; then
 	REQUEST_SIGNATURE=`echo $VIDEO_XML | perl -e '@text_in = <STDIN>; if (join(" ", @text_in) =~ /"signature":"(.*?)"/i ){ print "$1\n"; }'`
 	REQUEST_SIGNATURE_EXPIRES=`echo $VIDEO_XML | perl -e '@text_in = <STDIN>; if (join(" ", @text_in) =~ /"timestamp":(\d*?),/i ){ print "$1\n"; }'`
-	CAPTION=`echo $VIDEO_XML | perl -p -e 's:^.*?\<caption\>(.*?)\</caption\>.*$:$1:g'`
-	ISHD=`echo $VIDEO_XML |  perl -p -e 's:^.*?\<isHD\>(.*?)\</isHD\>.*$:$1:g'`
+	`echo $VIDEO_XML > response.html`
+	 CAPTION=`echo $VIDEO_XML |ruby -e 'puts STDIN.readlines.to_s.scan(/<title>(.*?)\s?on Vimeo/i).to_s.gsub(/[^a-zA-Z-]/,"_")'`
+	 ISHD=`echo $VIDEO_XML | ruby -e 'puts STDIN.readlines.to_s.scan(/"hd":(0|1)/).to_s'`
+	# ISHD=`echo $VIDEO_XML | ruby -e 'puts STDIN.readlines.to_s.scan(/"qualities":\[("[sh]d",?)+\]/)'` # outputs array of sd, hd, may be useful later
+	EXT='flv'
 
-	if [ ${ISHD} -eq 1 ]; then
+	if [ $ISHD -eq 1 ]; then
 		ISHD="hd"
+		EXT="mp4"
 	else
 		ISHD="sd"
+		# EXT="flv"
 	fi
 
-	# caption can contain bad characters (like '/') so don't use it for now
-	#FILENAME="${CAPTION}-(${ISHD}${VIMEO_ID}).flv"
 
-	FILENAME="${VIMEO_ID}-${ISHD}.flv"
+	# FILENAME="${VIMEO_ID}-${ISHD}.flv"
+	FILENAME="${VIMEO_ID}-${CAPTION}-${ISHD}.${EXT}"
 else
 
 	# TODO update the sed code to work with the new site format
@@ -93,8 +98,8 @@ echo "Request_signature=${REQUEST_SIGNATURE}"
 echo "Request_signature_expires=${REQUEST_SIGNATURE_EXPIRES}"
 echo 
 
-EXEC_CMD="${GET_CMD} http://player.vimeo.com/play_redirect?clip_id=${VIMEO_ID}&sig=${REQUEST_SIGNATURE}&time=${REQUEST_SIGNATURE_EXPIRES}&quality=hd&codecs=H264,VP8,VP6&type=moogaloop_local&embed_location=" 
-echo "Executing ${EXEC_CMD}"
+EXEC_CMD="${GET_CMD} https://player.vimeo.com/play_redirect?clip_id=${VIMEO_ID}&sig=${REQUEST_SIGNATURE}&time=${REQUEST_SIGNATURE_EXPIRES}&quality=${ISHD}&codecs=H264,VP8,VP6&type=moogaloop_local&embed_location=" 
+echo "Executing ${EXEC_CMD} > ${FILENAME}"
 ${EXEC_CMD} > "${FILENAME}"
 
 echo
