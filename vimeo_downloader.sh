@@ -69,7 +69,7 @@ if [ $USING_PERL -eq 1 ]; then
 	# ISHD=`echo $VIDEO_XML | ruby -e 'puts STDIN.readlines.to_s.scan(/"qualities":\[("[sh]d",?)+\]/)'` # outputs array of sd, hd, may be useful later
 	EXT='flv'
 
-	if [ $ISHD -eq 1 ]; then
+	if [ $ISHD -ne 0 ]; then
 		ISHD="hd"
 		EXT="mp4"
 	else
